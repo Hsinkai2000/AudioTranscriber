@@ -50,4 +50,6 @@ async def transcribe_audio(file: UploadFile):
         predicted_ids = torch.argmax(logits, dim=-1)
         transcription = processor.batch_decode(predicted_ids)[0]
 
-    return {"transcription": transcription}
+    duration = len(audio) / samplerate
+
+    return {"transcription": transcription, "duration": str(duration)}
