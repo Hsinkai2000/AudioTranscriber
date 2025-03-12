@@ -1,0 +1,6 @@
+services:
+  asr-api:
+    build: .
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
