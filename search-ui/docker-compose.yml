@@ -1,6 +1,10 @@
-version: '3.8'
 services:
-  search-ui:
-    image: docker.elastic.co/search-ui/search-ui:latest
+  server:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
     ports:
-      - "3000:3000"
+      - 3000:3000
+    volumes:
+      - ./node_modules/.cache:/usr/src/app/node_modules/.cache
