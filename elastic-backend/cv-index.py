@@ -16,25 +16,25 @@ def create_index(client):
             "text": {"type": "text"},
             "up_votes": {"type": "integer"},
             "down_votes": {"type": "integer"},
-            "gender": {"type": "text",
+            "gender": {"type": "keyword",
                        "fields": {
                            "keyword": {
                                "type": "keyword"
                            }
                        }},
-            "age": {"type": "text",
+            "age": {"type": "keyword",
                     "fields": {
                         "keyword": {
                             "type": "keyword"
                         }
                     }},
-            "accent": {"type": "text",
+            "accent": {"type": "keyword",
                        "fields": {
                            "keyword": {
                                "type": "keyword"
                            }
                        }},
-            "duration": {"type": "text",
+            "duration": {"type": "float",
                          "fields": {
                              "keyword": {
                                  "type": "keyword"
@@ -65,7 +65,7 @@ def generate_actions(client):
         # Convert NaN values to strings
         for key, value in doc.items():
             if isinstance(value, float) and np.isnan(value):
-                doc[key] = None  # Or another suitable replacement like "null"
+                doc[key] = None
         client.index(index=INDEX_NAME, document=doc)
 
 

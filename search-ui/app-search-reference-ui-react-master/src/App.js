@@ -1,5 +1,7 @@
 import React from "react";
+
 import ElasticsearchAPIConnector from "@elastic/search-ui-elasticsearch-connector";
+
 import {
   ErrorBoundary,
   Facet,
@@ -15,39 +17,24 @@ import {
 import { Layout } from "@elastic/react-search-ui-views";
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 
-const connector = new ElasticsearchAPIConnector({
-  host: "http://localhost:9200",
-  index: "cv-transcriptions",
-});
+import {
+  buildAutocompleteQueryConfig,
+  buildFacetConfigFromConfig,
+  buildSearchOptionsFromConfig,
+  buildSortOptionsFromConfig,
+  getConfig,
+  getFacetFields,
+} from "./config/config-helper";
 
+const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig();
+const connector = new ElasticsearchAPIConnector({
+  host: endpointBase,
+  index: engineName,
+});
 const config = {
   searchQuery: {
-    search_fields: {
-      generated_text: { weight: 1 },
-    },
-    result_fields: {
-      generated_text: {
-        snippet: {},
-      },
-      duration: {
-        snippet: {},
-      },
-      age: {
-        snippet: {},
-      },
-      gender: {
-        snippet: {},
-      },
-      accent: {
-        snippet: {},
-      },
-    },
-  },
-  facets: {
-    "age.keyword": { type: "value" },
-    "gender.keyword": { type: "value" },
-    "accent.keyword": { type: "value" },
-    "duration.keyword": { type: "value" },
+    facets: buildFacetConfigFromConfig(),
+    ...buildSearchOptionsFromConfig(),
   },
   autocompleteQuery: {
     results: {
@@ -81,28 +68,32 @@ export default function App() {
             <div className="App">
               <ErrorBoundary>
                 <Layout
-                  header={
-                    <SearchBox
-                      autocompleteMinimumCharacters={3}
-                      autocompleteSuggestions={true}
-                      debounceLength={0}
-                    />
-                  }
+                  header={<SearchBox autocompleteSuggestions={true} />}
                   sideContent={
                     <div>
                       {wasSearched && (
-                        <Sorting label={"Sort by"} sortOptions={[]} />
+                        <Sorting
+                          label={"Sort by"}
+                          sortOptions={buildSortOptionsFromConfig()}
+                        />
                       )}
-                      {Object.keys(config.facets).map((field) => (
+                      {getFacetFields().map((field) => (
                         <Facet
                           key={field}
                           field={field}
-                          label={field.replace(".keyword", "")}
+                          label={field}
+                          filterType="any"
                         />
                       ))}
                     </div>
                   }
-                  bodyContent={<Results shouldTrackClickThrough={true} />}
+                  bodyContent={
+                    <Results
+                      titleField={getConfig().titleField}
+                      urlField={getConfig().urlField}
+                      shouldTrackClickThrough={true}
+                    />
+                  }
                   bodyHeader={
                     <React.Fragment>
                       {wasSearched && <PagingInfo />}

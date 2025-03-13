@@ -2,16 +2,20 @@
   "endpointBase": "http://localhost:9200",
   "engineName": "cv-transcriptions",
   "searchKey": "search-nyxkw1fuqex9qjhfvatbqfmw",
-  "searchFields": ["generated_text","duration","age","gender","accent"],
+  "searchFields": ["generated_text"],
   "resultFields": [
-    "generated_text",
+    "filename",
+    "text",
+    "up_votes",
+    "down_votes",
     "age",
     "gender",
     "accent",
-    "duration"
+    "duration",
+    "generated_text"
   ],
   "querySuggestFields": ["generated_text"],
-  "titleField": "cv-transcriptions",
-  "urlField": "nps_link",
-  "facets": ["duration", "age", "gender", "accent"]
+  "titleField": "filename",
+  "urlField": "filename",
+  "facets": ["duration.keyword", "age.keyword", "gender.keyword", "accent.keyword"]
 }

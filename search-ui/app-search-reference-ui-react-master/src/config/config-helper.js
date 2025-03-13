@@ -49,24 +49,8 @@ export function getThumbnailField() {
   return getConfig().thumbnailField;
 }
 
-export function getFacetFields(results) {
-  if (!results || !results.aggregations) {
-    return [];
-  }
-  const facetFields = [];
-  if (results.aggregations.duration) {
-    facetFields.push("duration");
-  }
-  if (results.aggregations.age) {
-    facetFields.push("age");
-  }
-  if (results.aggregations.gender) {
-    facetFields.push("gender");
-  }
-  if (results.aggregations.accent) {
-    facetFields.push("accent");
-  }
-  return facetFields;
+export function getFacetFields() {
+  return getConfig().facets || [];
 }
 
 export function getSortFields() {
@@ -166,17 +150,15 @@ export function buildSearchOptionsFromConfig() {
 
 export function buildFacetConfigFromConfig() {
   const config = getConfig();
+  if (!config.facets) return {};
 
-  const facets = (config.facets || []).reduce((acc, n) => {
-    acc = acc || {};
-    acc[n] = {
+  return config.facets.reduce((acc, field) => {
+    acc[field] = {
       type: "value",
-      size: 100,
+      size: 100, // Adjust size if needed
     };
     return acc;
-  }, undefined);
-
-  return facets;
+  }, {});
 }
 
 export function buildSortOptionsFromConfig() {
