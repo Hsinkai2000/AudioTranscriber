@@ -2,3 +2,4 @@ __pycache__/
 *.log
 .env
 .vscode/
+./asr/cv-valid-dev-updated.csv

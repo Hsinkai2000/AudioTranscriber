@@ -10,6 +10,10 @@ services:
       - cluster.initial_master_nodes=es01,es02
       - discovery.seed_hosts=es02
       - xpack.security.enabled=false
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
+      - http.cors.allow-headers=X-Requested-With,Content-Type,Content-Length,Authorization
     restart: unless-stopped
 
   es02:
@@ -20,4 +24,8 @@ services:
       - cluster.initial_master_nodes=es01,es02
       - discovery.seed_hosts=es01
       - xpack.security.enabled=false
+      - http.cors.enabled=true
+      - http.cors.allow-origin="*"
+      - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
+      - http.cors.allow-headers=X-Requested-With,Content-Type,Content-Length,Authorization
     restart: unless-stopped

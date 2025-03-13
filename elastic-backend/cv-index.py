@@ -9,6 +9,55 @@ load_dotenv()
 INDEX_NAME = "cv-transcriptions"
 
 
+def create_index(client):
+    mappings = {
+        "properties": {
+            "filename": {"type": "text"},
+            "text": {"type": "text"},
+            "up_votes": {"type": "integer"},
+            "down_votes": {"type": "integer"},
+            "gender": {"type": "text",
+                       "fields": {
+                           "keyword": {
+                               "type": "keyword"
+                           }
+                       }},
+            "age": {"type": "text",
+                    "fields": {
+                        "keyword": {
+                            "type": "keyword"
+                        }
+                    }},
+            "accent": {"type": "text",
+                       "fields": {
+                           "keyword": {
+                               "type": "keyword"
+                           }
+                       }},
+            "duration": {"type": "text",
+                         "fields": {
+                             "keyword": {
+                                 "type": "keyword"
+                             }
+                         }},
+            "generated_text": {
+                "type": "text",
+                "fields": {
+                    "suggest": {
+                        "type": "search_as_you_type"
+                    }
+                }
+            },
+        }
+    }
+
+    client.indices.create(
+        index=INDEX_NAME,
+        mappings=mappings,
+        ignore=400  # ignore 400 already exists code
+    )
+
+
 def generate_actions(client):
     df = pd.read_csv("../asr/cv-valid-dev-updated.csv")
     for index, row in df.iterrows():
@@ -22,6 +71,7 @@ def generate_actions(client):
 
 def main():
     client = Elasticsearch("http://127.0.0.1:9200/")
+    create_index(client)
     generate_actions(client)
 
 

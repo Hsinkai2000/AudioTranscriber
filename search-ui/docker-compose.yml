@@ -1,0 +1,6 @@
+version: '3.8'
+services:
+  search-ui:
+    image: docker.elastic.co/search-ui/search-ui:latest
+    ports:
+      - "3000:3000"
