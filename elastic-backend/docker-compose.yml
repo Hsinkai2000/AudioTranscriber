@@ -1,0 +1,23 @@
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.3
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - node.name=es01
+      - cluster.name=cv-transcriptions-cluster
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es02
+      - xpack.security.enabled=false
+    restart: unless-stopped
+
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.17.3
+    environment:
+      - node.name=es02
+      - cluster.name=cv-transcriptions-cluster
+      - cluster.initial_master_nodes=es01,es02
+      - discovery.seed_hosts=es01
+      - xpack.security.enabled=false
+    restart: unless-stopped

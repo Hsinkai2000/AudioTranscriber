@@ -1,0 +1,11 @@
+fastapi
+requests
+uvicorn
+transformers
+torch
+python-multipart
+soundfile
+scipy
+pandas
+python-dotenv
+elasticsearch
