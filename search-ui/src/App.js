@@ -81,7 +81,7 @@ export default function App() {
                         <Facet
                           key={field}
                           field={field}
-                          label={field}
+                          label={field.replace(/\.keyword$/, "")}
                           filterType="any"
                         />
                       ))}
