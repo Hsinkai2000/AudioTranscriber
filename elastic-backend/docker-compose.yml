@@ -3,7 +3,6 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.17.3
     ports:
       - 9200:9200
-      - 9300:9300
     environment:
       - node.name=es01
       - cluster.name=cv-transcriptions-cluster
@@ -13,7 +12,8 @@ services:
       - http.cors.enabled=true
       - http.cors.allow-origin="*"
       - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
-      - http.cors.allow-headers=X-Requested-With,Content-Type,Content-Length,Authorization
+      - http.cors.allow-headers=X-Requested-With,Content-Type,Content-Length,Authorization,x-elastic-client-meta
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m
     restart: unless-stopped
 
   es02:
@@ -27,5 +27,6 @@ services:
       - http.cors.enabled=true
       - http.cors.allow-origin="*"
       - http.cors.allow-methods=OPTIONS,HEAD,GET,POST,PUT,DELETE
-      - http.cors.allow-headers=X-Requested-With,Content-Type,Content-Length,Authorization
+      - http.cors.allow-headers=X-Requested-With,Content-Type,Content-Length,Authorization,x-elastic-client-meta
+      - ES_JAVA_OPTS=-Xms128m -Xmx128m
     restart: unless-stopped
